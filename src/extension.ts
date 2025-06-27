@@ -21,6 +21,38 @@ export function activate(context: vscode.ExtensionContext) {
 	});
 
 	context.subscriptions.push(disposable);
+
+	// Register the Lineage Panel command
+	let lineagePanelDisposable = vscode.commands.registerCommand('sqlmeshflow.showLineagePanel', () => {
+		const panel = vscode.window.createWebviewPanel(
+			'sqlmeshflowLineage',
+			'Lineage Panel',
+			vscode.ViewColumn.One,
+			{
+				enableScripts: true
+			}
+		);
+		panel.webview.html = getLineagePanelHtml();
+	});
+
+	context.subscriptions.push(lineagePanelDisposable);
+}
+
+function getLineagePanelHtml(): string {
+	return `
+		<!DOCTYPE html>
+		<html lang="en">
+		<head>
+			<meta charset="UTF-8">
+			<meta name="viewport" content="width=device-width, initial-scale=1.0">
+			<title>Lineage Panel</title>
+		</head>
+		<body>
+			<h2>Lineage Panel Placeholder</h2>
+			<p>The interactive lineage graph will appear here.</p>
+		</body>
+		</html>
+	`;
 }
 
 // This method is called when your extension is deactivated

@@ -16,6 +16,10 @@
       {
         "command": "sqlmeshflow.helloWorld",
         "title": "Hello SQLMesh"
+      },
+      {
+        "command": "sqlmeshflow.showLineagePanel",
+        "title": "Show Lineage Panel"
       }
     ]
   },
