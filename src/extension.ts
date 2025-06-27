@@ -2,6 +2,26 @@
 // Import the module and reference it with the alias vscode in your code below
 import * as vscode from 'vscode';
 
+class LineagePanelViewProvider implements vscode.WebviewViewProvider {
+	public static readonly viewType = 'sqlmeshflow.lineagePanelView';
+	private _view?: vscode.WebviewView;
+
+	constructor(private readonly _extensionUri: vscode.Uri) {}
+
+	resolveWebviewView(
+		view: vscode.WebviewView,
+		context: vscode.WebviewViewResolveContext,
+		_token: vscode.CancellationToken
+	) {
+		this._view = view;
+		view.webview.options = {
+			enableScripts: true,
+			localResourceRoots: [this._extensionUri]
+		};
+		view.webview.html = getLineagePanelHtml();
+	}
+}
+
 // This method is called when your extension is activated
 // Your extension is activated the very first time the command is executed
 export function activate(context: vscode.ExtensionContext) {
@@ -22,29 +42,20 @@ export function activate(context: vscode.ExtensionContext) {
 
 	context.subscriptions.push(disposable);
 
-	// Register the Lineage Panel command
-	let lineagePanelDisposable = vscode.commands.registerCommand('sqlmeshflow.showLineagePanel', () => {
-		const panel = vscode.window.createWebviewPanel(
-			'sqlmeshflowLineage',
-			'Lineage Panel',
-			vscode.ViewColumn.One,
-			{
-				enableScripts: true
-			}
-		);
-		panel.webview.html = getLineagePanelHtml();
-	});
-
-	context.subscriptions.push(lineagePanelDisposable);
+	// Register the Lineage Panel ViewProvider for the panel area
+	const provider = new LineagePanelViewProvider(context.extensionUri);
+	context.subscriptions.push(
+		vscode.window.registerWebviewViewProvider(LineagePanelViewProvider.viewType, provider)
+	);
 }
 
 function getLineagePanelHtml(): string {
 	return `
 		<!DOCTYPE html>
-		<html lang="en">
+		<html lang=\"en\">
 		<head>
-			<meta charset="UTF-8">
-			<meta name="viewport" content="width=device-width, initial-scale=1.0">
+			<meta charset=\"UTF-8\">
+			<meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">
 			<title>Lineage Panel</title>
 		</head>
 		<body>

@@ -16,12 +16,25 @@
       {
         "command": "sqlmeshflow.helloWorld",
         "title": "Hello SQLMesh"
-      },
-      {
-        "command": "sqlmeshflow.showLineagePanel",
-        "title": "Show Lineage Panel"
       }
-    ]
+    ],
+    "viewsContainers": {
+      "panel": [
+        {
+          "id": "sqlmeshflow-panel",
+          "title": "SQLMesh Flow",
+          "icon": "images/lineage_mockup.png"
+        }
+      ]
+    },
+    "views": {
+      "sqlmeshflow-panel": [
+        {
+          "id": "sqlmeshflow.lineagePanelView",
+          "name": "Lineage Panel"
+        }
+      ]
+    }
   },
   "scripts": {
     "vscode:prepublish": "npm run compile",
